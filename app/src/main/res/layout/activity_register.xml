@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".Register">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/login"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="30dp"
+            android:textColor="@color/redd"
+            android:gravity="center"
+            android:text="Already have an account?">
+        </TextView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="60dp"
+            android:padding="15dp"
+            android:background="@color/white"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Register"
+                android:textColor="@color/black"
+                android:textSize="40dp"
+                android:textStyle="bold"
+                android:alpha="0.9"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:text="Please enter info to create account"
+                android:alpha="0.9"/>
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"/>
+
+            <EditText
+                android:id="@+id/username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext"
+                android:textColor="@color/black"
+                android:padding="15dp"
+                android:hint="Username"
+                android:layout_marginTop="10dp"
+                android:drawableEnd="@drawable/baseline_person_24"
+                android:minHeight="48dp" />
+
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="10dp"/>
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:padding="15dp"
+                android:hint="Password"
+                android:background="@drawable/edittext"
+                android:layout_marginTop="10dp"
+                android:inputType="textPassword"
+                android:drawableEnd="@drawable/lock"
+                android:minHeight="48dp" />
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="10dp"/>
+            <EditText
+                android:id="@+id/password1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:padding="15dp"
+                android:hint="Confirm Password"
+                android:background="@drawable/edittext"
+                android:layout_marginTop="10dp"
+                android:inputType="textPassword"
+                android:drawableEnd="@drawable/lock"
+                android:minHeight="48dp" />
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="10dp"/>
+
+            <EditText
+                android:id="@+id/code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:layout_marginTop="10dp"
+                android:hint="Code"
+                android:padding="15dp"
+                android:background="@drawable/edittext"
+                android:drawableEnd="@drawable/baseline_key_24"
+                android:minHeight="48dp" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="10dp"/>
+
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext"
+                android:textColor="@color/black"
+                android:layout_marginTop="10dp"
+                android:hint="Email address"
+                android:padding="15dp"
+                android:drawableEnd="@drawable/baseline_email_24"
+                android:minHeight="48dp" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="10dp"/>
+
+            <EditText
+                android:id="@+id/phonenumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:background="@drawable/edittext"
+                android:layout_marginTop="10dp"
+                android:padding="15dp"
+                android:hint="Cellphone number"
+                android:drawableEnd="@drawable/baseline_smartphone_24"
+                android:minHeight="48dp" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/register1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Register"
+                android:layout_marginTop="20dp"
+                app:backgroundTint="@color/gold" />
+
+
+
+
+
+        </LinearLayout>
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

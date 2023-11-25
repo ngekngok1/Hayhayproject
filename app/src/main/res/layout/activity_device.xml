@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:id="@+id/layout"
+    android:layout_height="match_parent"
+    tools:context=".Device">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:id="@+id/top"
+        ></View>
+
+    <GridLayout
+        android:layout_below="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="44dp"
+        android:id="@+id/name"
+        android:columnCount="2"
+        android:rowCount="2">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="1"
+            android:layout_rowWeight="1"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:layout_margin="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="15dp"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center">
+
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/Fan"
+                    android:layout_centerVertical="true"
+                    android:thumb="@drawable/thumb"
+                    app:track="@drawable/track"
+                    android:textStyle="bold"
+                    android:checked="true"
+                    android:onClick="FanClick"></Switch>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="10dp"
+                    android:text="Fan"
+                    android:textSize="30dp"
+                    android:textStyle="bold"></TextView>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="1"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_margin="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="15dp"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_height="wrap_content"
+                    android:thumb="@drawable/thumb"
+                    app:track="@drawable/track"
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/Cover"
+                    android:layout_centerVertical="true"
+                    android:textStyle="bold"
+                    android:checked="true"
+                    android:onClick="CoverClick"></Switch>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="10dp"
+                    android:text="Cover"
+                    android:textSize="30dp"
+                    android:textStyle="bold"></TextView>
+
+            </LinearLayout>
+        </LinearLayout>
+    </GridLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/name"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:thumb="@drawable/thumb"
+            app:track="@drawable/track"
+            android:id="@+id/device"
+            android:layout_centerVertical="true"
+            android:textStyle="bold"
+            android:checked="true"
+            android:onClick="DeviceClick"></Switch>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Device"
+            android:textSize="30dp"
+            android:textStyle="bold"></TextView>
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:gravity="center_horizontal"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="30dp">
+
+        <ImageView
+            android:id="@+id/weather"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="100dp"
+            android:layout_height="165dp"
+            android:src="@drawable/weather1"
+            android:text="Forgot password"
+            android:textColor="@color/black" />
+    </RelativeLayout>
+
+</RelativeLayout>

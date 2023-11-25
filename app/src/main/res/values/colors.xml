@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="yellow5">#008000</color>
+    <color name="yellow1">#FF0000</color>
+    <color name="yellow2">#DAA520</color>
+    <color name="yellow3">#333300</color>
+    <color name="gray">#4c4c4c</color>
+    <color name="gray1">#7393B3</color>
+    <color name="lightgray">#A9A9A9</color>
+    <color name="third">#4c4c4c</color>  <!--back ubos -->
+    <color name="sec">#323232</color> <!--back top -->
+    <color name="first">#323232</color> <!--cardview -->
+    <color name="pastel">#FDDA0D</color>
+    <color name="mango">#F4BB44</color>
+    <color name="gold">#DAA520</color>
+    <color name="darkgold">#8B8000</color>
+    <color name="sky">#6495ED</color>
+    <color name="third1">#A9A9A9</color>
+    <color name="parch">#FFE87C</color>
+    <color name="redd">#880808</color>
+
+</resources>
