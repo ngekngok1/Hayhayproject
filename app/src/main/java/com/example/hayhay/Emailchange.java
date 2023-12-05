@@ -77,7 +77,7 @@ public class Emailchange extends AppCompatActivity {
                                     }
                                 });
                         Toast.makeText(getApplicationContext(), "YOU SUCCESSFULLY CHANGED YOUR EMAIL!", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(getApplicationContext(), Settings.class));
+                        startActivity(new Intent(getApplicationContext(), Settings1.class));
                     }
 
                     @Override

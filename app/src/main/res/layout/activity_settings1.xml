@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/layout"
-    tools:context=".Settings">
+    tools:context=".Settings1">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -68,85 +68,85 @@
                 android:columnCount="2"
                 android:rowCount="3">
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_row="1"
-                android:layout_rowWeight="1"
-                android:layout_column="0"
-                android:layout_columnWeight="1"
-                android:id="@+id/updateback"
-                android:layout_margin="11dp"
-                app:cardCornerRadius="15dp"
-                app:cardElevation="6dp">
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_row="1"
+                    android:layout_rowWeight="1"
+                    android:layout_column="0"
+                    android:layout_columnWeight="1"
+                    android:id="@+id/updateback"
+                    android:layout_margin="11dp"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="6dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <ImageButton
-
-                        android:id="@+id/update1"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="30dp"
-                        android:background="@color/white"
-                        android:src="@drawable/baseline_account_circle_24"></ImageButton
-                        >
-
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:text="Account"
-                        android:id="@+id/text1"
-                        android:textSize="15dp"
-                        android:gravity="center"
-                        android:layout_marginBottom="30dp"></TextView>
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                        <ImageButton
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_row="1"
-                android:layout_rowWeight="1"
-                android:layout_column="1"
-                android:layout_columnWeight="1"
-                android:id="@+id/aboutback"
-                android:layout_margin="11dp"
-                app:cardCornerRadius="15dp"
-                app:cardElevation="6dp">
+                            android:id="@+id/update1"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="30dp"
+                            android:background="@color/white"
+                            android:src="@drawable/baseline_account_circle_24"></ImageButton
+                            >
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:text="Account"
+                            android:id="@+id/text1"
+                            android:textSize="15dp"
+                            android:gravity="center"
+                            android:layout_marginBottom="30dp"></TextView>
 
-                    <ImageButton
-                        android:layout_width="80dp"
-                        android:id="@+id/about1"
-                        android:layout_height="80dp"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="30dp"
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
-                        android:background="@color/white"
-                        android:src="@drawable/baseline_info_24"></ImageButton>
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_row="1"
+                    android:layout_rowWeight="1"
+                    android:layout_column="1"
+                    android:layout_columnWeight="1"
+                    android:id="@+id/aboutback"
+                    android:layout_margin="11dp"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="6dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:text="About Us"
-                        android:layout_marginBottom="30dp"
-                        android:id="@+id/text2"
-                        android:textSize="15dp"></TextView>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                        <ImageButton
+                            android:layout_width="80dp"
+                            android:id="@+id/about1"
+                            android:layout_height="80dp"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="30dp"
+
+                            android:background="@color/white"
+                            android:src="@drawable/baseline_info_24"></ImageButton>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:text="About Us"
+                            android:layout_marginBottom="30dp"
+                            android:id="@+id/text2"
+                            android:textSize="15dp"></TextView>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
             </GridLayout>
 
         </LinearLayout>

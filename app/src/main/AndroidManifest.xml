@@ -26,6 +26,9 @@
         android:theme="@style/Theme.Hayhay"
         tools:targetApi="31">
         <activity
+            android:name=".Settings1"
+            android:exported="false" />
+        <activity
             android:name=".Codeupdate"
             android:exported="false" />
         <activity

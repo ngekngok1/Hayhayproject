@@ -16,6 +16,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -88,6 +92,20 @@ public class Codeupdate extends AppCompatActivity {
                         }
                     });
                 }
+
+                databaseReference.child("Code").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        String power = snapshot.getValue(String.class);
+                        DatabaseReference otherNodeReference = FirebaseDatabase.getInstance().getReference(power).child("Status");
+                        otherNodeReference.setValue("0");
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
 
             @Override
@@ -97,67 +115,77 @@ public class Codeupdate extends AppCompatActivity {
             }
         });
 
+
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myNodeRef.child("Password").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        // This method is called once with the initial value and whenever the data at this location is updated
-                        String usernamee = phone1.getText().toString().trim();
-                        String password = pass.getText().toString().trim();
-                        String powerValue = dataSnapshot.getValue(String.class);
+                String newPassword = pass.getText().toString().trim(); // New password for the update
+                String enteredCode = phone1.getText().toString().trim(); // Entered code
 
-                        if(!password.matches(powerValue))
-                        {
-                            pass.setError("Password isn't correct!");
-                            return;
-                        }
+                // Get the current user from Firebase Authentication
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-                        DatabaseReference myNodeRef1 = database.getReference(usernamee);
-                        myNodeRef1.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if (snapshot.exists()) {
-                                    if (snapshot.child("Status").exists()) {
-                                        String power = snapshot.child("Status").getValue(String.class);
-                                        if(power.equals("1")) {
-                                            phone1.setError("Code is already taken");
-                                            return;
-                                        }
+                if (user != null) {
+                    // Create an AuthCredential using the user's email and the provided password
+                    AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), newPassword);
+
+                    // Re-authenticate the user with the provided credentials
+                    user.reauthenticate(credential)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        // Password re-authenticated, proceed with updating data in Firebase Database
+
+                                                        DatabaseReference myNodeRef1 = database.getReference(enteredCode);
+
+                                                        myNodeRef1.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                                if (snapshot.exists()) {
+                                                                    if (snapshot.child("Status").exists()) {
+                                                                        String power = snapshot.child("Status").getValue(String.class);
+                                                                        if(power.equals("1")) {
+                                                                            phone1.setError("Code is already taken");
+                                                                            return;
+                                                                        }
+                                                                    }
+                                                                    myNodeRef.child("Code").setValue(enteredCode);
+                                                                    DatabaseReference childNodeRef3 = myNodeRef1.child("Device");
+                                                                    childNodeRef3.setValue(0);
+                                                                    Toast.makeText(getApplicationContext(), "YOU SUCCESSFULLY CHANGED YOUR CODE", Toast.LENGTH_SHORT).show();
+                                                                    startActivity(new Intent(getApplicationContext(), Settings1.class));
+                                                                }
+                                                                else {
+                                                                    Toast.makeText(Codeupdate.this, "CODE DOEST NOT EXIST", Toast.LENGTH_SHORT).show();
+                                                                    phone1.setError(("CODE DOEST NOT EXIST"));
+                                                                }
+
+                                                            }
+
+                                                            @Override
+                                                            public void onCancelled(@NonNull DatabaseError error) {
+
+                                                            }
+                                                        });
+                                                    }
+
+
+
+
+                                     else {
+                                        // Re-authentication failed
+                                        pass.setError("Password isn't correct!");
+                                        // Handle re-authentication failure
                                     }
-                                    myNodeRef1.child("Status").setValue("0");
-                                    myNodeRef.child("Code").setValue(usernamee);
-                                    DatabaseReference childNodeRef3 = myNodeRef1.child("Fan");
-                                    DatabaseReference childNodeRef6 = myNodeRef1.child("Cover");
-                                    childNodeRef3.setValue("0");
-                                    childNodeRef6.setValue("0");
-                                    Toast.makeText(getApplicationContext(), "YOU SUCCESSFULLY CHANGED YOUR CODE", Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(getApplicationContext(), Settings.class));
                                 }
-                                else {
-                                    Toast.makeText(Codeupdate.this, "CODE DOEST NOT EXIST", Toast.LENGTH_SHORT).show();
-                                    phone1.setError(("CODE DOEST NOT EXIST"));
-                                }
-
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-                        });
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        // Handle errors
-                        Toast.makeText(Codeupdate.this, "Error: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                            });
+                }
             }
         });
+
+
+
 
         goback.setOnClickListener(new View.OnClickListener() {
             @Override

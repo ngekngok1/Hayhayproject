@@ -1,5 +1,6 @@
 package com.example.hayhay;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
@@ -15,6 +16,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -98,32 +103,35 @@ public class Phonechange extends AppCompatActivity {
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myNodeRef.child("Password").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        // This method is called once with the initial value and whenever the data at this location is updated
-                        String usernamee = phone1.getText().toString().trim();
-                        String password = pass.getText().toString().trim();
-                        String powerValue = dataSnapshot.getValue(String.class);
+                String newPassword = pass.getText().toString().trim(); // New password for username change
+                String usernamee = phone1.getText().toString().trim(); // New username
 
-                        if(!password.matches(powerValue))
-                        {
-                            pass.setError("Password isn't correct!");
-                            return;
-                        }
-                        myNodeRef.child("Phone Number").setValue(usernamee);
-                        Toast.makeText(getApplicationContext(), "YOU SUCCESSFULLY CHANGED YOUR PHONE NUMMBER!", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(getApplicationContext(), Settings.class));
-                    }
+                // Get the user's current FirebaseUser
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        // Handle errors
-                        Toast.makeText(Phonechange.this, "Error: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                // Create AuthCredential using the user's email and the current password entered by the user
+                AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), newPassword);
+
+                // Re-authenticate the user with the provided credentials
+                user.reauthenticate(credential)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    // Password re-authenticated, proceed with updating username
+                                    myNodeRef.child("Phone Number").setValue(usernamee);
+                                    Toast.makeText(getApplicationContext(), "YOU SUCCESSFULLY CHANGED YOUR PHONE NUMBER!", Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(getApplicationContext(), Settings1.class));
+                                } else {
+                                    // Re-authentication failed
+                                    pass.setError("Password isn't correct!");
+                                    // Handle re-authentication failure
+                                }
+                            }
+                        });
             }
         });
+
 
         goback.setOnClickListener(new View.OnClickListener() {
             @Override

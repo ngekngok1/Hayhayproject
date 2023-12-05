@@ -26,7 +26,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class Settings extends AppCompatActivity {
+public class Settings1 extends AppCompatActivity {
 
     CardView back1,back2,back3,back4;
     TextView text11,text22,text33,text44,goback;
@@ -37,7 +37,7 @@ public class Settings extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        setContentView(R.layout.activity_settings1);
         layout2 = findViewById(R.id.layout1);
         goback = findViewById(R.id.back);
         text11 = findViewById(R.id.text1);
@@ -61,7 +61,7 @@ public class Settings extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
-                Toast.makeText(Settings.this,"Logged out", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Settings1.this,"Logged out", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 finish();
             }
@@ -76,7 +76,7 @@ public class Settings extends AppCompatActivity {
         about.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Settings.this, Aboutus.class);
+                Intent intent = new Intent(Settings1.this, Aboutus.class);
                 // Start the NextActivity
                 startActivity(intent);
             }
@@ -84,7 +84,7 @@ public class Settings extends AppCompatActivity {
         help1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Settings.this, Helpcenter.class);
+                Intent intent = new Intent(Settings1.this, Helpcenter.class);
                 // Start the NextActivity
                 startActivity(intent);
             }
@@ -145,7 +145,7 @@ public class Settings extends AppCompatActivity {
                 update.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(Settings.this, Update.class);
+                        Intent intent = new Intent(Settings1.this, Update.class);
                         // Start the NextActivity
                         startActivity(intent);
                     }
@@ -156,7 +156,7 @@ public class Settings extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 // Handle errors
-                Toast.makeText(Settings.this, "Error: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Settings1.this, "Error: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -320,6 +320,7 @@
                 android:fontFamily="@font/baloo_thambi"
                 android:layout_gravity="bottom">
             </TextView>
+
             <TextView
                 android:id="@+id/loc1"
                 android:layout_width="match_parent"
@@ -349,7 +350,7 @@
 
         <TextView
             android:id="@+id/devicee"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/weatherback"
             android:layout_marginStart="15dp"
@@ -358,9 +359,10 @@
             android:text="Device:"
             android:textSize="20dp"></TextView>
 
+
         <Button
             android:layout_marginStart="15dp"
-            android:text="Fan"
+            android:text=""
             android:background="@drawable/edittext"
             android:id="@+id/fan"
             android:layout_marginTop="50dp"
@@ -370,9 +372,8 @@
 
         </Button>
         <Button
-            android:text="Cover"
+            android:text="connect to HayHay_AP"
             android:id="@+id/cover"
-            android:visibility="invisible"
             android:layout_marginEnd="15dp"
             android:layout_marginTop="50dp"
             android:layout_width="130dp"

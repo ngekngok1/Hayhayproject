@@ -175,7 +175,7 @@ public class Update extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                startActivity(new Intent(getApplicationContext(), Settings1.class));
             }
         });
         myNodeRef.child("Code").addValueEventListener(new ValueEventListener() {

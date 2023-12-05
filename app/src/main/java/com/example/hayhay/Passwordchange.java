@@ -55,7 +55,7 @@ public class Passwordchange extends AppCompatActivity {
                 }
                 myNodeRef.child("Password").setValue(usernamee);
                 Toast.makeText(getApplicationContext(), "YOU SUCCESSFULLY CHANGED YOUR PASSWORD!", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(), Settings.class));
+                startActivity(new Intent(getApplicationContext(), Settings1.class));
 
             }
 

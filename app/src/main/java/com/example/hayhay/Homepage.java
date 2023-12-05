@@ -68,11 +68,10 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-
+import android.provider.Settings;
 
 public class Homepage extends AppCompatActivity {
     private ListView listView;
@@ -139,10 +138,20 @@ public class Homepage extends AppCompatActivity {
         loc11 = findViewById(R.id.loc1);
         location1 = findViewById(R.id.location);
         fan1.setEnabled(false);
-        cover1.setEnabled(false);
+        cover1.setEnabled(true);
+        cover1.setTextColor(getResources().getColor(R.color.lightgray));
+        ViewCompat.setBackgroundTintList(cover1, ColorStateList.valueOf(sky));
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         String userId = user.getUid();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(userId);
+
+        cover1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
+                startActivity(intent);
+            }
+        });
 
         databaseReference.child("Code").addValueEventListener(new ValueEventListener() {
             @Override
@@ -169,6 +178,7 @@ public class Homepage extends AppCompatActivity {
 
         DatabaseReference codeReference = FirebaseDatabase.getInstance().getReference(userId).child("Code");
 
+
         codeReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -190,8 +200,9 @@ public class Homepage extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         fan1.setText("ON");
+                                        int num = 1;
                                         ViewCompat.setBackgroundTintList(fan1, ColorStateList.valueOf(sky));
-                                        makeNotification();
+                                        makeNotification(num);
                                     }
                                 });
                             } else {
@@ -200,13 +211,15 @@ public class Homepage extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         fan1.setText("OFF");
+                                        int num = 0;
                                         ViewCompat.setBackgroundTintList(fan1, ColorStateList.valueOf(third));
+                                        makeNotification(num);
                                     }
                                 });
 
                             }
                         }
-                        public void makeNotification() {
+                        public void makeNotification(int num) {
                             // Check if there are pending notifications
                             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                             boolean isNotificationActive = false;
@@ -215,15 +228,15 @@ public class Homepage extends AppCompatActivity {
                                 StatusBarNotification[] notifications = notificationManager.getActiveNotifications();
 
                                 for (StatusBarNotification notification : notifications) {
-                                    if (notification.getId() == 0 /* Replace 0 with your notification ID */) {
-                                        // There is already a notification with the same ID pending, don't send a new one
+                                    if (notification.getId() == 0 /* Check for notification 1 ID */) {
                                         isNotificationActive = true;
                                         break;
                                     }
                                 }
                             }
 
-                            if (!isNotificationActive) {
+                            if (num == 1 && !isNotificationActive) {
+
                                 Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.img);
                                 String chanelID = "CHANNEL_ID_NOTIFICATION";
 
@@ -237,6 +250,7 @@ public class Homepage extends AppCompatActivity {
                                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
                                 Date date = new Date(timestamp);
                                 String formattedDateTime = sdf.format(date);
+
 
                                 // Construct the notification message with date and time
                                 String data = "\nYour clothes are now covered, and your fan is now turned on!\n" + "" + formattedDateTime + "\n";
@@ -272,9 +286,62 @@ public class Homepage extends AppCompatActivity {
                                     }
                                 }
 
+                                notificationManager.notify(1, builder.build());
+                            }else if (num == 0 && isNotificationActive) {
+                                Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.img);
+                                String chanelID = "CHANNEL_ID_NOTIFICATION";
+
+                                // Create a reference to your Firebase Realtime Database under the specific user's "Notifications" child node
+                                DatabaseReference userReference = FirebaseDatabase.getInstance().getReference().child(userId).child("Notifications");
+
+                                // Get the current timestamp
+                                long timestamp = System.currentTimeMillis();
+
+                                // Format the timestamp into a readable date and time
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+                                Date date = new Date(timestamp);
+                                String formattedDateTime = sdf.format(date);
+
+
+                                // Construct the notification message with date and time
+                                String data = "\nNo rain detected\n" + "" + formattedDateTime + "\n";
+
+                                // Push the notification data to Firebase Realtime Database
+                                DatabaseReference newNotificationRef = userReference.push();
+                                newNotificationRef.setValue(data);
+
+                                NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), chanelID);
+                                builder.setSmallIcon(R.drawable.img)
+                                        .setContentTitle("NO RAIN DETECTED!")
+                                        .setContentText(data)
+                                        .setLargeIcon(logoBitmap)
+                                        .setAutoCancel(true)
+                                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+                                Intent intent = new Intent(getApplicationContext(), Notification.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                intent.putExtra("data", "Some value to be passed here");
+
+                                PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_MUTABLE);
+                                builder.setContentIntent(pendingIntent);
+
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    NotificationChannel notificationChannel = notificationManager.getNotificationChannel(chanelID);
+
+                                    if (notificationChannel == null) {
+                                        int importance = NotificationManager.IMPORTANCE_HIGH;
+                                        notificationChannel = new NotificationChannel(chanelID, "Some description", importance);
+                                        notificationChannel.setLightColor(Color.GREEN);
+                                        notificationChannel.enableVibration(true);
+                                        notificationManager.createNotificationChannel(notificationChannel);
+                                    }
+                                }
+
                                 notificationManager.notify(0, builder.build());
                             }
+
                         }
+
 
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
@@ -291,7 +358,6 @@ public class Homepage extends AppCompatActivity {
                 Log.e("FirebaseError", "Error reading Code: " + databaseError.getMessage());
             }
         });
-
 
         back1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -313,6 +379,7 @@ public class Homepage extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+
                                     toolbar.setBackgroundColor(getResources().getColor(R.color.gray));
                                     devicet.setTextColor(getResources().getColor(R.color.lightgray));
                                     text33.setTextColor(getResources().getColor(R.color.lightgray));
@@ -345,7 +412,7 @@ public class Homepage extends AppCompatActivity {
                                 public void run() {
                                     toolbar.setBackgroundColor(getResources().getColor(R.color.grad));
                                     layout.setBackgroundColor(Color.WHITE);
-                                    location1.setTextColor(getResources().getColor(R.color.white));
+                                    location1.setTextColor(getResources().getColor(R.color.black));
                                     devicet.setTextColor(getResources().getColor(R.color.black));
                                     text33.setTextColor(getResources().getColor(R.color.black));
                                     settingst.setTextColor(getResources().getColor(R.color.black));
@@ -381,7 +448,7 @@ public class Homepage extends AppCompatActivity {
         back3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Settings.class));
+                startActivity(new Intent(getApplicationContext(), Settings1.class));
             }
         });
         back4.setOnClickListener(new View.OnClickListener() {
@@ -489,7 +556,7 @@ public class Homepage extends AppCompatActivity {
                         public void run() {
                             toolbar.setBackgroundColor(getResources().getColor(R.color.grad));
                             layout.setBackgroundColor(Color.WHITE);
-                            location1.setTextColor(getResources().getColor(R.color.white));
+                            location1.setTextColor(getResources().getColor(R.color.black));
                             devicet.setTextColor(getResources().getColor(R.color.black));
                             text33.setTextColor(getResources().getColor(R.color.black));
                             settingst.setTextColor(getResources().getColor(R.color.black));
@@ -523,7 +590,7 @@ public class Homepage extends AppCompatActivity {
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Homepage.this, Settings.class);
+                Intent intent = new Intent(Homepage.this, Settings1.class);
                 // Start the NextActivity
                 startActivity(intent);
             }
@@ -542,9 +609,9 @@ public class Homepage extends AppCompatActivity {
 
         feedback.setOnClickListener(new View.OnClickListener()
 
-            {
-                @Override
-                public void onClick (View v){
+        {
+            @Override
+            public void onClick (View v){
                 Intent intent = new Intent(Intent.ACTION_SENDTO);
                 String UriText = "mailto:" + Uri.encode("hayhayprojectt@gmail.com") + "?subject=" + Uri.encode("Feedback") + "&body="
                         + Uri.encode("");
@@ -553,8 +620,8 @@ public class Homepage extends AppCompatActivity {
                 startActivity(Intent.createChooser(intent, "Send Feedback to"));
             }
 
-            });
-        }
+        });
+    }
 
     private void getLocation() {
 
@@ -702,5 +769,3 @@ public class Homepage extends AppCompatActivity {
 
 
 }
-
-
