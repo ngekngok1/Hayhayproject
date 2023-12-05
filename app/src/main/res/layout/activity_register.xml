@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="45dp"
             android:padding="15dp"
             android:background="@color/white"
             >
@@ -49,71 +49,93 @@
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"/>
-
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:passwordToggleEnabled="false">
             <EditText
                 android:id="@+id/username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edittext"
+                android:drawablePadding="10dp"
                 android:textColor="@color/black"
                 android:padding="15dp"
                 android:hint="Username"
                 android:layout_marginTop="10dp"
-                android:drawableEnd="@drawable/baseline_person_24"
+                android:drawableStart="@drawable/baseline_person_24"
                 android:minHeight="48dp" />
-
+            </com.google.android.material.textfield.TextInputLayout>
 
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="10dp"/>
-
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:passwordToggleEnabled="true">
             <EditText
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:padding="15dp"
-                android:hint="Password"
-                android:background="@drawable/edittext"
                 android:layout_marginTop="10dp"
+                android:background="@drawable/edittext"
+                android:drawableStart="@drawable/lock"
+                android:drawablePadding="10dp"
+                android:hint="Password"
                 android:inputType="textPassword"
-                android:drawableEnd="@drawable/lock"
-                android:minHeight="48dp" />
+                android:minHeight="48dp"
+                android:padding="15dp"
+                android:textColor="@color/black" />
+            </com.google.android.material.textfield.TextInputLayout>
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="10dp"/>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:passwordToggleEnabled="true">
             <EditText
                 android:id="@+id/password1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:padding="15dp"
+                android:drawablePadding="10dp"
                 android:hint="Confirm Password"
                 android:background="@drawable/edittext"
                 android:layout_marginTop="10dp"
                 android:inputType="textPassword"
-                android:drawableEnd="@drawable/lock"
+                android:drawableStart="@drawable/lock"
                 android:minHeight="48dp" />
+            </com.google.android.material.textfield.TextInputLayout>
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="10dp"/>
-
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:passwordToggleEnabled="false">
             <EditText
                 android:id="@+id/code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:layout_marginTop="10dp"
+                android:drawablePadding="10dp"
                 android:hint="Code"
                 android:padding="15dp"
                 android:background="@drawable/edittext"
-                android:drawableEnd="@drawable/baseline_key_24"
+                android:drawableStart="@drawable/baseline_key_24"
                 android:minHeight="48dp" />
-
+            </com.google.android.material.textfield.TextInputLayout>
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="10dp"/>
-
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:passwordToggleEnabled="false">
             <EditText
                 android:id="@+id/email"
                 android:layout_width="match_parent"
@@ -121,15 +143,19 @@
                 android:background="@drawable/edittext"
                 android:textColor="@color/black"
                 android:layout_marginTop="10dp"
+                android:drawablePadding="10dp"
                 android:hint="Email address"
                 android:padding="15dp"
-                android:drawableEnd="@drawable/baseline_email_24"
+                android:drawableStart="@drawable/baseline_email_24"
                 android:minHeight="48dp" />
-
+            </com.google.android.material.textfield.TextInputLayout>
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="10dp"/>
-
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:passwordToggleEnabled="false">
             <EditText
                 android:id="@+id/phonenumber"
                 android:layout_width="match_parent"
@@ -137,11 +163,12 @@
                 android:textColor="@color/black"
                 android:background="@drawable/edittext"
                 android:layout_marginTop="10dp"
+                android:drawablePadding="10dp"
                 android:padding="15dp"
                 android:hint="Cellphone number"
-                android:drawableEnd="@drawable/baseline_smartphone_24"
+                android:drawableStart="@drawable/baseline_smartphone_24"
                 android:minHeight="48dp" />
-
+            </com.google.android.material.textfield.TextInputLayout>
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"/>

@@ -13,11 +13,14 @@
         android:layout_height="wrap_content"
         tools:context=".Homepage">
 
+
     <View
         android:id="@+id/topview"
         android:layout_width="match_parent"
-        android:layout_height="591dp"
-        android:background="@drawable/backgroundgrad"></View>
+        android:layout_height="521dp"
+        android:background="@drawable/backgroundgrad">
+
+    </View>
 
 
     <GridLayout
@@ -120,7 +123,8 @@
             android:layout_columnWeight="1"
             android:layout_margin="11dp"
             app:cardCornerRadius="15dp"
-            app:cardElevation="6dp">
+            app:cardElevation="6dp"
+            android:layout_marginBottom="40dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -158,7 +162,8 @@
             android:layout_columnWeight="1"
             android:layout_margin="11dp"
             app:cardCornerRadius="15dp"
-            app:cardElevation="6dp">
+            app:cardElevation="6dp"
+            android:layout_marginBottom="40dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -190,71 +195,42 @@
 
     </GridLayout>
 
-    <GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="34dp"
-        android:layout_marginBottom="20dp"
-        android:id="@+id/name"
-        android:columnCount="2"
-        android:rowCount="2">
-
-        <LinearLayout
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_row="1"
-            android:layout_rowWeight="1"
-            android:layout_column="0"
-            android:layout_columnWeight="1"
-            android:layout_margin="15dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginBottom="15dp"
-            app:cardCornerRadius="15dp"
-            app:cardElevation="15dp">
-
-            <LinearLayout
+        <Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/grad">
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:id="@+id/day"
-                    android:textColor="@color/lightgray"
-                    android:text="Good Day"
-                    android:textSize="35dp"
-                    android:textStyle="bold"></TextView>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:textColor="@color/lightgray"
-                    android:layout_marginTop="10dp"
                     android:id="@+id/name1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:fontFamily="@font/baloo_thambi"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:layout_marginTop="10dp"
                     android:text=""
-                    android:textSize="20dp"
-                    android:textStyle="bold"></TextView>
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:id="@+id/logo1"
+                    android:layout_marginEnd="20dp"
+                    android:src="@drawable/img"
+                    android:layout_alignParentEnd="true"
+                    >
+                </ImageView>
+            </RelativeLayout>
 
-            </LinearLayout>
-        </LinearLayout>
+        </Toolbar>
 
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_row="1"
-        android:layout_rowWeight="1"
-        android:layout_column="1"
-        android:layout_columnWeight="1"
-        android:src="@drawable/img"
-        app:cardCornerRadius="15dp"
-        app:cardElevation="15dp">
-    </ImageView>
-    </GridLayout>
+
 
 
     <RelativeLayout
@@ -262,7 +238,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:gravity="center_horizontal"
-        android:layout_below="@+id/name"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/toolbar"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="30dp">
 
@@ -282,7 +259,7 @@
                 android:id="@+id/sunrain"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginBottom="80dp"
                 android:src="@drawable/sunnyrain1"
                 android:visibility="invisible"></pl.droidsonroids.gif.GifImageView>
@@ -291,7 +268,7 @@
                 android:id="@+id/cloudy"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginBottom="80dp"
                 android:src="@drawable/cloudy"
                 android:visibility="invisible"></pl.droidsonroids.gif.GifImageView>
@@ -300,7 +277,7 @@
                 android:id="@+id/cloudynight"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginBottom="80dp"
                 android:src="@drawable/cloudynight"
                 android:visibility="invisible"></pl.droidsonroids.gif.GifImageView>
@@ -327,7 +304,7 @@
                 android:id="@+id/cloudyday"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginBottom="80dp"
                 android:src="@drawable/cloudyday"
                 android:visibility="invisible"></pl.droidsonroids.gif.GifImageView>
@@ -338,18 +315,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="40dp"
-                android:layout_marginBottom="-8dp"
-                android:layout_marginStart="10dp"
-                android:layout_gravity="bottom"
-                android:textStyle="bold">
+                android:layout_marginBottom="-38dp"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/baloo_thambi"
+                android:layout_gravity="bottom">
             </TextView>
             <TextView
                 android:id="@+id/loc1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:textSize="20dp"
-                android:layout_marginBottom="-7dp"
+                android:textSize="15dp"
+                android:layout_marginBottom="2dp"
                 android:layout_gravity="bottom">
 
             </TextView>
@@ -359,23 +336,26 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/loc"
                 android:layout_gravity="bottom"
+                android:fontFamily="@font/baloo_thambi"
                 android:layout_marginEnd="20dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="13dp"
                 android:gravity="end"
-                android:textStyle="bold"
-                android:textSize="25dp" />
+                android:textSize="20dp" />
 
 
         </androidx.cardview.widget.CardView>
+
         <TextView
-            android:layout_marginStart="15dp"
             android:id="@+id/devicee"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Device:"
             android:layout_below="@+id/weatherback"
+            android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
+            android:fontFamily="@font/baloo_thambi"
+            android:text="Device:"
             android:textSize="20dp"></TextView>
 
         <Button
@@ -392,6 +372,7 @@
         <Button
             android:text="Cover"
             android:id="@+id/cover"
+            android:visibility="invisible"
             android:layout_marginEnd="15dp"
             android:layout_marginTop="50dp"
             android:layout_width="130dp"

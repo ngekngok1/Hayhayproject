@@ -4,145 +4,178 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/layout"
     android:background="@color/white"
     tools:context=".Update">
 
+    <Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/grad">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/name1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:fontFamily="@font/baloo_thambi"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:layout_marginTop="10dp"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/logo1"
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/img"
+                android:layout_alignParentEnd="true"
+                >
+            </ImageView>
+        </RelativeLayout>
+
+    </Toolbar>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/back"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="30dp"
+            android:textColor="@color/redd"
+            android:gravity="center"
+            android:text="Go back"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/layout1"
             android:orientation="vertical"
             android:layout_marginTop="60dp"
             android:padding="15dp"
             android:background="@color/white"
             >
+
+
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Update"
+                android:alpha="0.9"
+                android:id="@+id/info"
+                android:fontFamily="@font/baloo_thambi"
+                android:text="Information"
                 android:textColor="@color/black"
-                android:textSize="40dp"
-                android:textStyle="bold"
-                android:alpha="0.9"/>
+                android:textSize="35dp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="13dp"
-                android:text="Change your info you want to update"
+                android:id="@+id/info1"
+                android:layout_marginTop="-15dp"
+                android:text="Click the info you want to change"
                 android:alpha="0.9"/>
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"/>
 
-            <EditText
-                android:id="@+id/username"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/edittext"
-                android:textColor="@color/black"
-                android:padding="15dp"
-                android:hint="Username"
-                android:layout_marginTop="10dp"
-                android:drawableEnd="@drawable/baseline_person_24"
-                android:minHeight="48dp" />
-
+                    <TextView
+                        android:id="@+id/username"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edittext"
+                        android:drawablePadding="10dp"
+                        android:textColor="@color/black"
+                        android:textSize="18dp"
+                        android:padding="15dp"
+                        android:text="Username"
+                        android:layout_marginTop="10dp"
+                        android:drawableStart="@drawable/baseline_person_24"
+                        android:minHeight="48dp" ></TextView>
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="10dp"/>
+                <TextView
+                    android:id="@+id/password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/edittext"
+                    android:drawableStart="@drawable/lock"
+                    android:textSize="18dp"
+                    android:drawablePadding="10dp"
+                    android:password="true"
+                    android:text="Password123456"
+                    android:minHeight="48dp"
+                    android:padding="15dp"
+                    android:textColor="@color/black" />
 
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="10dp"/>
 
-            <EditText
-                android:id="@+id/password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:padding="15dp"
-                android:hint="Password"
-                android:background="@drawable/edittext"
-                android:layout_marginTop="10dp"
-                android:inputType="textPassword"
-                android:drawableEnd="@drawable/lock"
-                android:minHeight="48dp" />
+                <TextView
+                    android:id="@+id/code"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="10dp"
+                    android:drawablePadding="10dp"
+                    android:text="Code"
+                    android:padding="15dp"
+                    android:textSize="18dp"
+                    android:background="@drawable/edittext"
+                    android:drawableStart="@drawable/baseline_key_24"
+                    android:minHeight="48dp" />
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="10dp"/>
-            <EditText
-                android:id="@+id/password1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:padding="15dp"
-                android:hint="Confirm Password"
-                android:background="@drawable/edittext"
-                android:layout_marginTop="10dp"
-                android:inputType="textPassword"
-                android:drawableEnd="@drawable/lock"
-                android:minHeight="48dp" />
+                <TextView
+                    android:id="@+id/email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="10dp"
+                    android:drawablePadding="10dp"
+                    android:textSize="18dp"
+                    android:text="Email address"
+                    android:padding="15dp"
+                    android:drawableStart="@drawable/baseline_email_24"
+                    android:minHeight="48dp" />
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="10dp"/>
+                <TextView
+                    android:id="@+id/phonenumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:background="@drawable/edittext"
+                    android:layout_marginTop="10dp"
+                    android:drawablePadding="10dp"
+                    android:padding="15dp"
+                    android:text="Cellphone number"
+                    android:textSize="18dp"
+                    android:drawableStart="@drawable/baseline_smartphone_24"
+                    android:minHeight="48dp" />
 
-            <EditText
-                android:id="@+id/code"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:layout_marginTop="10dp"
-                android:hint="Code"
-                android:padding="15dp"
-                android:background="@drawable/edittext"
-                android:drawableEnd="@drawable/baseline_key_24"
-                android:minHeight="48dp" />
-
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="10dp"/>
-
-            <EditText
-                android:id="@+id/email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/edittext"
-                android:textColor="@color/black"
-                android:layout_marginTop="10dp"
-                android:hint="Email address"
-                android:padding="15dp"
-                android:drawableEnd="@drawable/baseline_email_24"
-                android:minHeight="48dp" />
-
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="10dp"/>
-
-            <EditText
-                android:id="@+id/phonenumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:background="@drawable/edittext"
-                android:layout_marginTop="10dp"
-                android:padding="15dp"
-                android:hint="Cellphone number"
-                android:drawableEnd="@drawable/baseline_smartphone_24"
-                android:minHeight="48dp" />
 
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"/>
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/update1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Register"
-                android:layout_marginTop="20dp"
-                app:backgroundTint="@color/gold" />
-
-
-
 
 
         </LinearLayout>

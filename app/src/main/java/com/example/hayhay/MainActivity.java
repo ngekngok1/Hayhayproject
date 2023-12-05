@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         password1 = findViewById(R.id.password);
         fAuth = FirebaseAuth.getInstance();
         mAuth = FirebaseAuth.getInstance();
+        password1.setTransformationMethod(new PasswordTransformationMethod());
         forgot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,9 +64,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         if(fAuth.getCurrentUser() != null){
-            Toast.makeText(MainActivity.this,"", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(getApplicationContext(),Homepage.class));
             finish();
+        }
+        else{
+            FirebaseAuth.getInstance().signOut();
         }
 
         button.setOnClickListener(new View.OnClickListener() {

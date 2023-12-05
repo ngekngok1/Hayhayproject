@@ -34,11 +34,15 @@ import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -52,6 +56,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -69,9 +75,14 @@ import java.util.Locale;
 
 
 public class Homepage extends AppCompatActivity {
+    private ListView listView;
+    private List<String> messages;
+    private ArrayAdapter<String> adapter;
     Button fan1,cover1;
     CardView back1, back2, back3, back4, back5;
     TextView name, day1, text, location1,loc11;
+    ImageView logo1;
+    Toolbar toolbar;
     ImageButton notification, settings, feedback,dark;
     FirebaseAuth fAuth;
     GifImageView sun1, sunrain1, cloudy1, cloudynight1, thunderstorm1, cloudyday1, nightrain1;
@@ -80,6 +91,8 @@ public class Homepage extends AppCompatActivity {
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FirebaseUser user = mAuth.getCurrentUser();
     RelativeLayout layout;
+
+
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 101;
     FusedLocationProviderClient fusedLocationClient;
 
@@ -88,6 +101,10 @@ public class Homepage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
+        toolbar = findViewById(R.id.toolbar);
+        logo1 = findViewById(R.id.logo1);
+        messages = new ArrayList<>();
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, messages);
         fan1 = findViewById(R.id.fan);
         text33 = findViewById(R.id.text3);
         cover1 = findViewById(R.id.cover);
@@ -110,7 +127,6 @@ public class Homepage extends AppCompatActivity {
         settings = findViewById(R.id.settings);
         feedback = findViewById(R.id.feedback);
         name = findViewById(R.id.name1);
-        day1 = findViewById(R.id.day);
         view = findViewById(R.id.topview);
         dark = findViewById(R.id.dark1);
         int matt = ContextCompat.getColor(this, R.color.first);
@@ -122,9 +138,263 @@ public class Homepage extends AppCompatActivity {
         text = findViewById(R.id.loc);
         loc11 = findViewById(R.id.loc1);
         location1 = findViewById(R.id.location);
+        fan1.setEnabled(false);
+        cover1.setEnabled(false);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         String userId = user.getUid();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(userId);
+
+        databaseReference.child("Code").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and whenever the data at this location is updated
+                String powerValue = dataSnapshot.getValue(String.class);
+                DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference(powerValue);
+                databaseReference1.child("Status").setValue("1");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        logo1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Homepage.class));
+
+            }
+        });
+
+        DatabaseReference codeReference = FirebaseDatabase.getInstance().getReference(userId).child("Code");
+
+        codeReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and whenever the data at this location is updated
+                String powerValue = dataSnapshot.getValue(String.class);
+                // Check if powerValue is not null
+                if (powerValue != null) {
+                    // Now, you can construct the path to the node you want to read
+                    DatabaseReference otherNodeReference = FirebaseDatabase.getInstance().getReference(powerValue).child("Device");
+
+                    otherNodeReference.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot otherNodeSnapshot) {
+                            int powerValue = otherNodeSnapshot.getValue(int.class);
+
+                            if (powerValue==1) {
+                                // If Power value is "1", turn on the switch
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        fan1.setText("ON");
+                                        ViewCompat.setBackgroundTintList(fan1, ColorStateList.valueOf(sky));
+                                        makeNotification();
+                                    }
+                                });
+                            } else {
+                                // If Power value is not "1", turn off the switch
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        fan1.setText("OFF");
+                                        ViewCompat.setBackgroundTintList(fan1, ColorStateList.valueOf(third));
+                                    }
+                                });
+
+                            }
+                        }
+                        public void makeNotification() {
+                            // Check if there are pending notifications
+                            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                            boolean isNotificationActive = false;
+
+                            if (notificationManager != null) {
+                                StatusBarNotification[] notifications = notificationManager.getActiveNotifications();
+
+                                for (StatusBarNotification notification : notifications) {
+                                    if (notification.getId() == 0 /* Replace 0 with your notification ID */) {
+                                        // There is already a notification with the same ID pending, don't send a new one
+                                        isNotificationActive = true;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if (!isNotificationActive) {
+                                Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.img);
+                                String chanelID = "CHANNEL_ID_NOTIFICATION";
+
+                                // Create a reference to your Firebase Realtime Database under the specific user's "Notifications" child node
+                                DatabaseReference userReference = FirebaseDatabase.getInstance().getReference().child(userId).child("Notifications");
+
+                                // Get the current timestamp
+                                long timestamp = System.currentTimeMillis();
+
+                                // Format the timestamp into a readable date and time
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+                                Date date = new Date(timestamp);
+                                String formattedDateTime = sdf.format(date);
+
+                                // Construct the notification message with date and time
+                                String data = "\nYour clothes are now covered, and your fan is now turned on!\n" + "" + formattedDateTime + "\n";
+
+                                // Push the notification data to Firebase Realtime Database
+                                DatabaseReference newNotificationRef = userReference.push();
+                                newNotificationRef.setValue(data);
+
+                                NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), chanelID);
+                                builder.setSmallIcon(R.drawable.img)
+                                        .setContentTitle("RAIN DETECTED!")
+                                        .setContentText(data)
+                                        .setLargeIcon(logoBitmap)
+                                        .setAutoCancel(true)
+                                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+                                Intent intent = new Intent(getApplicationContext(), Notification.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                intent.putExtra("data", "Some value to be passed here");
+
+                                PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_MUTABLE);
+                                builder.setContentIntent(pendingIntent);
+
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    NotificationChannel notificationChannel = notificationManager.getNotificationChannel(chanelID);
+
+                                    if (notificationChannel == null) {
+                                        int importance = NotificationManager.IMPORTANCE_HIGH;
+                                        notificationChannel = new NotificationChannel(chanelID, "Some description", importance);
+                                        notificationChannel.setLightColor(Color.GREEN);
+                                        notificationChannel.enableVibration(true);
+                                        notificationManager.createNotificationChannel(notificationChannel);
+                                    }
+                                }
+
+                                notificationManager.notify(0, builder.build());
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            // Handle errors
+                            Log.e("FirebaseError", "Error reading OtherNode: " + databaseError.getMessage());
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle errors
+                Log.e("FirebaseError", "Error reading Code: " + databaseError.getMessage());
+            }
+        });
+
+
+        back1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Notification.class));
+            }
+        });
+
+        back2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                databaseReference.child("Mode").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        // This method is called once with the initial value and whenever the data at this location is updated
+                        String powerValue = dataSnapshot.getValue(String.class);
+                        if (powerValue != null && powerValue.equals("1")) {
+                            // If Power value is "1", turn on the switch
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    toolbar.setBackgroundColor(getResources().getColor(R.color.gray));
+                                    devicet.setTextColor(getResources().getColor(R.color.lightgray));
+                                    text33.setTextColor(getResources().getColor(R.color.lightgray));
+                                    settingst.setTextColor(getResources().getColor(R.color.lightgray));
+                                    location1.setTextColor(getResources().getColor(R.color.lightgray));
+                                    feedbackt.setTextColor(getResources().getColor(R.color.lightgray));
+                                    notificationt.setTextColor(getResources().getColor(R.color.lightgray));
+                                    ViewCompat.setBackgroundTintList(back1, ColorStateList.valueOf(matt));
+                                    ViewCompat.setBackgroundTintList(back2, ColorStateList.valueOf(matt));
+                                    ViewCompat.setBackgroundTintList(back3, ColorStateList.valueOf(matt));
+                                    ViewCompat.setBackgroundTintList(back4, ColorStateList.valueOf(matt));
+                                    ViewCompat.setBackgroundTintList(back5, ColorStateList.valueOf(gray));
+                                    dark.setBackgroundColor(getResources().getColor(R.color.first));
+                                    settings.setBackgroundColor(getResources().getColor(R.color.first));
+                                    notification.setBackgroundColor(getResources().getColor(R.color.first));
+                                    feedback.setBackgroundColor(getResources().getColor(R.color.first));
+                                    view.setBackgroundColor(getResources().getColor(R.color.sec));
+                                    layout.setBackgroundColor(getResources().getColor(R.color.gray));
+                                    loc11.setTextColor(getResources().getColor(R.color.lightgray));
+                                    text.setTextColor(getResources().getColor(R.color.lightgray));
+                                    name.setTextColor(getResources().getColor(R.color.gray));
+
+
+                                }
+                            });
+                        } else {
+                            // If Power value is not "1", turn off the switch
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    toolbar.setBackgroundColor(getResources().getColor(R.color.grad));
+                                    layout.setBackgroundColor(Color.WHITE);
+                                    location1.setTextColor(getResources().getColor(R.color.white));
+                                    devicet.setTextColor(getResources().getColor(R.color.black));
+                                    text33.setTextColor(getResources().getColor(R.color.black));
+                                    settingst.setTextColor(getResources().getColor(R.color.black));
+                                    feedbackt.setTextColor(getResources().getColor(R.color.black));
+                                    notificationt.setTextColor(getResources().getColor(R.color.black));
+                                    dark.setBackgroundColor(getResources().getColor(R.color.white));
+                                    settings.setBackgroundColor(getResources().getColor(R.color.white));
+                                    notification.setBackgroundColor(getResources().getColor(R.color.white));
+                                    feedback.setBackgroundColor(getResources().getColor(R.color.white));
+                                    ViewCompat.setBackgroundTintList(back1, ColorStateList.valueOf(white));
+                                    ViewCompat.setBackgroundTintList(back2, ColorStateList.valueOf(white));
+                                    ViewCompat.setBackgroundTintList(back3, ColorStateList.valueOf(white));
+                                    ViewCompat.setBackgroundTintList(back4, ColorStateList.valueOf(white));
+                                    ViewCompat.setBackgroundTintList(back5, ColorStateList.valueOf(white));
+                                    view.setBackgroundColor(getResources().getColor(R.color.yellow2));
+                                    loc11.setTextColor(getResources().getColor(R.color.black));
+                                    text.setTextColor(getResources().getColor(R.color.black));
+                                    name.setTextColor(getResources().getColor(R.color.black));
+
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // Handle errors
+                        Toast.makeText(Homepage.this, "Error: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+        back3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Settings.class));
+            }
+        });
+        back4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_SENDTO);
+                String UriText = "mailto:" + Uri.encode("hayhayprojectt@gmail.com") + "?subject=" + Uri.encode("Feedback") + "&body="
+                        + Uri.encode("");
+                Uri uri = Uri.parse(UriText);
+                intent.setData(uri);
+                startActivity(Intent.createChooser(intent, "Send Feedback to"));
+            }
+        });
 
         if (ContextCompat.checkSelfPermission(
                 this, Manifest.permission.ACCESS_FINE_LOCATION) !=
@@ -175,52 +445,8 @@ public class Homepage extends AppCompatActivity {
                 });
             }
         });
-        fan1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                databaseReference.child("Fan").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        // This method is called once with the initial value and whenever the data at this location is updated
-                        String currentValue = dataSnapshot.getValue(String.class);
-                        if (currentValue != null) {
-                            // Toggle the value between "0" and "1"
-                            String newValue = currentValue.equals("0") ? "1" : "0";
-                            databaseReference.child("Fan").setValue(newValue);
-                        }
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        // Handle errors
-                        Toast.makeText(Homepage.this, "Error: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
-        cover1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                databaseReference.child("Cover").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        // This method is called once with the initial value and whenever the data at this location is updated
-                        String currentValue = dataSnapshot.getValue(String.class);
-                        if (currentValue != null) {
-                            // Toggle the value between "0" and "1"
-                            String newValue = currentValue.equals("0") ? "1" : "0";
-                            databaseReference.child("Cover").setValue(newValue);
-                        }
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        // Handle errors
-                        Toast.makeText(Homepage.this, "Error: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
 
         databaseReference.child("Mode").addValueEventListener(new ValueEventListener() {
             @Override
@@ -232,9 +458,11 @@ public class Homepage extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            toolbar.setBackgroundColor(getResources().getColor(R.color.gray));
                             devicet.setTextColor(getResources().getColor(R.color.lightgray));
                             text33.setTextColor(getResources().getColor(R.color.lightgray));
                             settingst.setTextColor(getResources().getColor(R.color.lightgray));
+                            location1.setTextColor(getResources().getColor(R.color.lightgray));
                             feedbackt.setTextColor(getResources().getColor(R.color.lightgray));
                             notificationt.setTextColor(getResources().getColor(R.color.lightgray));
                             ViewCompat.setBackgroundTintList(back1, ColorStateList.valueOf(matt));
@@ -248,6 +476,9 @@ public class Homepage extends AppCompatActivity {
                             feedback.setBackgroundColor(getResources().getColor(R.color.first));
                             view.setBackgroundColor(getResources().getColor(R.color.sec));
                             layout.setBackgroundColor(getResources().getColor(R.color.gray));
+                            loc11.setTextColor(getResources().getColor(R.color.lightgray));
+                            text.setTextColor(getResources().getColor(R.color.lightgray));
+                            name.setTextColor(getResources().getColor(R.color.lightgray));
 
                         }
                     });
@@ -256,9 +487,9 @@ public class Homepage extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            toolbar.setBackgroundColor(getResources().getColor(R.color.grad));
                             layout.setBackgroundColor(Color.WHITE);
-                            day1.setTextColor(getResources().getColor(R.color.white));
-                            name.setTextColor(getResources().getColor(R.color.white));
+                            location1.setTextColor(getResources().getColor(R.color.white));
                             devicet.setTextColor(getResources().getColor(R.color.black));
                             text33.setTextColor(getResources().getColor(R.color.black));
                             settingst.setTextColor(getResources().getColor(R.color.black));
@@ -268,131 +499,19 @@ public class Homepage extends AppCompatActivity {
                             settings.setBackgroundColor(getResources().getColor(R.color.white));
                             notification.setBackgroundColor(getResources().getColor(R.color.white));
                             feedback.setBackgroundColor(getResources().getColor(R.color.white));
-                            settings.setBackgroundColor(getResources().getColor(R.color.white));
-                            notification.setBackgroundColor(getResources().getColor(R.color.white));
-                            feedback.setBackgroundColor(getResources().getColor(R.color.white));
                             ViewCompat.setBackgroundTintList(back1, ColorStateList.valueOf(white));
                             ViewCompat.setBackgroundTintList(back2, ColorStateList.valueOf(white));
                             ViewCompat.setBackgroundTintList(back3, ColorStateList.valueOf(white));
                             ViewCompat.setBackgroundTintList(back4, ColorStateList.valueOf(white));
                             ViewCompat.setBackgroundTintList(back5, ColorStateList.valueOf(white));
                             view.setBackgroundColor(getResources().getColor(R.color.yellow2));
+                            loc11.setTextColor(getResources().getColor(R.color.black));
+                            text.setTextColor(getResources().getColor(R.color.black));
+                            name.setTextColor(getResources().getColor(R.color.black));
                         }
                     });
                 }
             }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Handle errors
-                Toast.makeText(Homepage.this, "Error: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-        databaseReference.child("Cover").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String powerValue = dataSnapshot.getValue(String.class);
-
-                if (powerValue != null && powerValue.equals("1")) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ViewCompat.setBackgroundTintList(cover1, ColorStateList.valueOf(sky));
-                        }
-                    });
-                } else {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ViewCompat.setBackgroundTintList(cover1, ColorStateList.valueOf(third));
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Handle errors if needed
-            }
-        });
-        databaseReference.child("Fan").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and whenever the data at this location is updated
-                String powerValue = dataSnapshot.getValue(String.class);
-
-                if (powerValue != null && powerValue.equals("1")) {
-                    // If Power value is "1", turn on the switch
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ViewCompat.setBackgroundTintList(fan1, ColorStateList.valueOf(sky));
-                            makeNotification();
-                        }
-                    });
-                } else {
-                    // If Power value is not "1", turn off the switch
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ViewCompat.setBackgroundTintList(fan1, ColorStateList.valueOf(third));
-                        }
-                    });
-                }
-            }
-
-            public void makeNotification() {
-                // Check if there are pending notifications
-                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                boolean isNotificationActive = false;
-
-                if (notificationManager != null) {
-                    StatusBarNotification[] notifications = notificationManager.getActiveNotifications();
-
-                    for (StatusBarNotification notification : notifications) {
-                        if (notification.getId() == 0 /* Replace 0 with your notification ID */) {
-                            // There is already a notification with the same ID pending, don't send a new one
-                            isNotificationActive = true;
-                            break;
-                        }
-                    }
-                }
-
-                if (!isNotificationActive) {
-                    Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.img);
-                    String chanelID = "CHANNEL_ID_NOTIFICATION";
-                    String data = "Your clothes are now covered, and your fan is now turned on! :)";
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), chanelID);
-                    builder.setSmallIcon(R.drawable.img)
-                            .setContentTitle("RAIN DETECTED!")
-                            .setContentText(data)
-                            .setLargeIcon(logoBitmap)
-                            .setAutoCancel(true)
-                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-                    Intent intent = new Intent(getApplicationContext(), Notification.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.putExtra("data", "Some value to be passed here");
-
-                    PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_MUTABLE);
-                    builder.setContentIntent(pendingIntent);
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        NotificationChannel notificationChannel = notificationManager.getNotificationChannel(chanelID);
-
-                        if (notificationChannel == null) {
-                            int importance = NotificationManager.IMPORTANCE_HIGH;
-                            notificationChannel = new NotificationChannel(chanelID, "Some description", importance);
-                            notificationChannel.setLightColor(Color.GREEN);
-                            notificationChannel.enableVibration(true);
-                            notificationManager.createNotificationChannel(notificationChannel);
-                        }
-                    }
-
-                    notificationManager.notify(0, builder.build());
-                }
-            }
-
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -421,9 +540,11 @@ public class Homepage extends AppCompatActivity {
             }
         });
 
-        feedback.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        feedback.setOnClickListener(new View.OnClickListener()
+
+            {
+                @Override
+                public void onClick (View v){
                 Intent intent = new Intent(Intent.ACTION_SENDTO);
                 String UriText = "mailto:" + Uri.encode("hayhayprojectt@gmail.com") + "?subject=" + Uri.encode("Feedback") + "&body="
                         + Uri.encode("");
@@ -432,8 +553,8 @@ public class Homepage extends AppCompatActivity {
                 startActivity(Intent.createChooser(intent, "Send Feedback to"));
             }
 
-        });
-    }
+            });
+        }
 
     private void getLocation() {
 
@@ -455,7 +576,7 @@ public class Homepage extends AppCompatActivity {
                                         String country = addresses.get(0).getCountryName();
 
                                         // Display the location information
-                                        String locationText = "" + city + "   \n" + country;
+                                        String locationText = "" + city + "\n" + country;
                                         location1.setText(locationText);
 
                                     }
@@ -517,7 +638,7 @@ public class Homepage extends AppCompatActivity {
                             String weatherConditionText = String.format("\t%s\n", finalWeatherCondition);
                             text.setText(temperatureText);
                             loc11.setText(weatherConditionText);
-                            if (finalWeatherCondition.equals("clear sky") || finalWeatherCondition.equals("few clouds") || finalWeatherCondition.equals("broken clouds")) {
+                            if (finalWeatherCondition.equals("clear sky") || finalWeatherCondition.equals("few clouds") || finalWeatherCondition.equals("broken clouds") || finalWeatherCondition.equals("scattered clouds")) {
                                 if (hourOfDay >= 0 && hourOfDay < 4) {
                                     cloudynight1.setVisibility(View.VISIBLE);
                                 } else if (hourOfDay >= 6 && hourOfDay < 18) {

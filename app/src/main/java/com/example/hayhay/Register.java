@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -77,7 +78,7 @@ public class Register extends AppCompatActivity {
                             String phonenumber2 = phonenumber1.getText().toString().trim();
                             String username2 = username1.getText().toString().trim();
                             String emailPattern = "[a-zA-Z0-9._-]+@gmail+\\.+com+";
-                            String phonenum = "(0|\\+63)\\d{10}";
+                            String phonenum = "(09|\\+639)\\d{9}";
 
                             if(TextUtils.isEmpty(username2)){
                                 username1.setError("Username is Required");
@@ -123,13 +124,15 @@ public class Register extends AppCompatActivity {
                                 email1.setError("Enter a valid Email address");
                                 return;
                             }
-                            if (dataSnapshot.child("Cover").exists()) {
-                                String coverValue = dataSnapshot.child("Cover").getValue(String.class);
-                                if (coverValue.equals("1")) {
-                                    code1.setError("Code is already taken");
-                                    return;
-                                }
+                            if (dataSnapshot.child("Status").exists()) {
+                                String power = dataSnapshot.getValue(String.class);
+                                    if(power.equals("1")) {
+                                        code1.setError("Code is already taken");
+                                        return;
+                                    }
                             }
+                            password1.setTransformationMethod(new PasswordTransformationMethod());
+                            password2.setTransformationMethod(new PasswordTransformationMethod());
                             fAuth.createUserWithEmailAndPassword(email2, password12).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -138,42 +141,32 @@ public class Register extends AppCompatActivity {
                                             String passwordd = password1.getText().toString().trim();
                                             String email = email1.getText().toString().trim();
                                             String phone = phonenumber1.getText().toString().trim();
-                                            String fan = "0";
-                                            String cover = "0";
-                                            String device = "0";
                                             String mode = "0";
 
                                             FirebaseUser user = mAuth.getCurrentUser();
                                             String userId = user.getUid();
                                             DatabaseReference usersRef = database.getReference(userId);
-                                            DatabaseReference childNodeRef3 = myNodeRef.child("Fan");
-                                            DatabaseReference childNodeRef6 = myNodeRef.child("Cover");
-                                            DatabaseReference childNodeRef7 = myNodeRef.child("Device");
+                                            DatabaseReference childNodeRef3 = myNodeRef.child("Device");
+                                            DatabaseReference childNodeRef7 = myNodeRef.child("Status");
 
                                             DatabaseReference childNodeRef00 = usersRef.child("Username");
-                                            DatabaseReference childNodeRef11 = usersRef.child("Password");
                                             DatabaseReference childNodeRef44 = usersRef.child("Email");
                                             DatabaseReference childNodeRef55 = usersRef.child("Phone Number");
                                             DatabaseReference childNodeRef22 = usersRef.child("Code");
-                                            DatabaseReference childNodeRef33 = usersRef.child("Fan");
-                                            DatabaseReference childNodeRef66 = usersRef.child("Cover");
-                                            DatabaseReference childNodeRef77 = usersRef.child("Device");
                                             DatabaseReference childNodeRef88 = usersRef.child("Mode");
+                                            DatabaseReference childNodeRef99 = usersRef.child("Notifications");
                                             databaseReference = FirebaseDatabase.getInstance().getReference(codee);
                                             usersRef.setValue(email);
                                             childNodeRef00.setValue(usernamee);
-                                            childNodeRef11.setValue(passwordd);
                                             childNodeRef22.setValue(codee);
-                                            childNodeRef33.setValue(fan);
                                             childNodeRef44.setValue(email);
                                             childNodeRef55.setValue(phone);
-                                            childNodeRef66.setValue(cover);
-                                            childNodeRef77.setValue(device);
                                             childNodeRef88.setValue(mode);
+                                            childNodeRef99.setValue(0);
 
-                                            childNodeRef3.setValue(fan);
-                                            childNodeRef6.setValue(cover);
-                                            childNodeRef7.setValue(device);
+                                            childNodeRef3.setValue(0);
+                                            childNodeRef7.setValue("0");
+
                                             Log.d(TAG, "Node exists!");
                                             user = mAuth.getCurrentUser();
                                             if (user != null) {
@@ -182,7 +175,7 @@ public class Register extends AppCompatActivity {
                                                     public void onComplete(@NonNull Task<Void> verificationTask) {
                                                         if (verificationTask.isSuccessful()) {
                                                             Toast.makeText(Register.this, "Email has been sent to your email address", Toast.LENGTH_SHORT).show();
-                                                            // You may want to prompt the user to check their email for verification
+
                                                         } else {
                                                             Toast.makeText(Register.this, "Oops! Something went wrong", Toast.LENGTH_SHORT).show();
                                                         }
@@ -191,7 +184,9 @@ public class Register extends AppCompatActivity {
                                                 // Proceed with other actions or show relevant messages
                                             }
 
-
+                                            fAuth.signOut();
+                                            startActivity(new Intent(Register.this, MainActivity.class));
+                                            finish();
 
                                         } else {
                                             Toast.makeText(Register.this, "ERROR!" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -219,7 +214,7 @@ public class Register extends AppCompatActivity {
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                         // Handle errors
-                        Log.e(TAG, "Error: " + databaseError.getMessage());
+                        Log.e(TAG, "" + databaseError.getMessage());
                     }
                 });
             }

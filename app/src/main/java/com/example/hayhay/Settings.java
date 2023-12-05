@@ -29,7 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 public class Settings extends AppCompatActivity {
 
     CardView back1,back2,back3,back4;
-    TextView text11,text22,text33,text44;
+    TextView text11,text22,text33,text44,goback;
     ImageButton update, about, log, help1;
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     LinearLayout layout2;
@@ -39,6 +39,7 @@ public class Settings extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         layout2 = findViewById(R.id.layout1);
+        goback = findViewById(R.id.back);
         text11 = findViewById(R.id.text1);
         text22 = findViewById(R.id.text2);
         text33 = findViewById(R.id.text3);
@@ -53,6 +54,7 @@ public class Settings extends AppCompatActivity {
         log = findViewById(R.id.log1);
         int matt = ContextCompat.getColor(this, R.color.first);
         int white = ContextCompat.getColor(this, R.color.white);
+
         String userId = user.getUid();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(userId);
         log.setOnClickListener(new View.OnClickListener() {
@@ -64,7 +66,29 @@ public class Settings extends AppCompatActivity {
                 finish();
             }
         });
+        goback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                startActivity(new Intent(getApplicationContext(), Homepage.class));
+            }
+        });
+        about.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Settings.this, Aboutus.class);
+                // Start the NextActivity
+                startActivity(intent);
+            }
+        });
+        help1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Settings.this, Helpcenter.class);
+                // Start the NextActivity
+                startActivity(intent);
+            }
+        });
 
 
         final RelativeLayout layout = findViewById(R.id.layout);
@@ -79,6 +103,7 @@ public class Settings extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            goback.setTextColor(getResources().getColor(R.color.lightgray));
                             layout2.setBackgroundColor(getResources().getColor(R.color.first));
                             layout.setBackgroundColor(getResources().getColor(R.color.gray));
                             text11.setTextColor(getResources().getColor(R.color.lightgray));
@@ -126,6 +151,7 @@ public class Settings extends AppCompatActivity {
                     }
                 });
             }
+
 
             @Override
             public void onCancelled(DatabaseError databaseError) {

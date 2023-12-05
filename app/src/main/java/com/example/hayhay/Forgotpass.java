@@ -16,22 +16,26 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class Forgotpass extends AppCompatActivity {
     Button button;
     EditText email;
-    TextView login1;
+    TextView login1, note;
     FirebaseAuth mAuth;
+    FirebaseAuth fAuth;
     String stremail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgotpass);
+        note = findViewById(R.id.note);
         button = findViewById(R.id.reset);
         email = findViewById(R.id.email);
         login1 = findViewById(R.id.login);
         mAuth = FirebaseAuth.getInstance();
-
+        fAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         login1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,6 +49,13 @@ public class Forgotpass extends AppCompatActivity {
             public void onClick(View v) {
                 stremail = email.getText().toString().trim();
                 if(!TextUtils.isEmpty(stremail)){
+                    String emailPattern = "[a-zA-Z0-9._-]+@gmail+\\.+com+";
+                    String email2 = email.getText().toString().trim();
+                    if(!email2.matches(emailPattern)){
+                        email.setError("Enter a valid Email address");
+                        return;
+                    }
+
                     ResetPassword();
 
                 }else{
@@ -58,10 +69,9 @@ public class Forgotpass extends AppCompatActivity {
         mAuth.sendPasswordResetEmail(stremail).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(Forgotpass.this,"Reset Password link has been sent to your registered email", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(Forgotpass.this,MainActivity.class);
-                        startActivity(intent);
-                        finish();
+
+                                Toast.makeText(Forgotpass.this,"Reset Password link has been sent to your registered email", Toast.LENGTH_SHORT).show();
+                                note.setVisibility(View.VISIBLE);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

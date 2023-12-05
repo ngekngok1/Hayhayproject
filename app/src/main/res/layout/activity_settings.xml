@@ -12,6 +12,7 @@
         android:id="@+id/top1"
         android:layout_height="250dp"
         >
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -52,6 +53,7 @@
         android:layout_below="@+id/top1"
         android:id="@+id/top"
         >
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -153,7 +155,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/top">
-
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/back"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="20dp"
+            android:textColor="@color/redd"
+            android:gravity="center"
+            android:text="Go back"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
