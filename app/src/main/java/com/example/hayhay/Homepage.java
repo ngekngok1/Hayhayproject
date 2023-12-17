@@ -91,7 +91,7 @@ public class Homepage extends AppCompatActivity {
     FirebaseUser user = mAuth.getCurrentUser();
     RelativeLayout layout;
 
-
+    
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 101;
     FusedLocationProviderClient fusedLocationClient;
 
@@ -462,7 +462,7 @@ public class Homepage extends AppCompatActivity {
                 startActivity(Intent.createChooser(intent, "Send Feedback to"));
             }
         });
-
+        //Jhean
         if (ContextCompat.checkSelfPermission(
                 this, Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED) {
@@ -473,7 +473,7 @@ public class Homepage extends AppCompatActivity {
         } else {
             getLocation();
         }
-
+        //Jhean naa pay ubos
         databaseReference.child("Username").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -622,7 +622,7 @@ public class Homepage extends AppCompatActivity {
 
         });
     }
-
+    //Jhean
     private void getLocation() {
 
         try {
@@ -660,7 +660,7 @@ public class Homepage extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
+        
     private void fetchWeather(double latitude, double longitude) {
         // Your OpenWeatherMap API key
         String apiKey = "201a67abeec47d8ef8db5a1b8be8f4cc";
@@ -764,7 +764,7 @@ public class Homepage extends AppCompatActivity {
             }
         }
     }
-
+//Jhean last
 
 
 
